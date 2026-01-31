@@ -1,0 +1,71 @@
+<header data-scroll class="header">
+	<div class="header__container">
+		<div class="header__wrapper">
+			<a href="index.php" class="header__logo logo">
+				<img class="logo__white-image" src="../../images/icon/logo-white.svg" alt="logo">
+				<img class="logo__black-image" src="../../images/icon/logo-black.svg" alt="logo">
+			</a>
+			<div data-da=".header__cta, 767.98, last" class="header__menu menu">
+				<button type="button" class="menu__icon icon-menu"><span></span></button>
+				<nav class="menu__body">
+					<ul class="menu__list">
+						<li class="menu__item"><a href="about.php" class="menu__link">О компании</a></li>
+						<li class="menu__item"><a href="portfolio.php" class="menu__link">Портфолио</a></li>
+						<li class="menu__item"><a href="contacts.php" class="menu__link">Контакты</a></li>
+					</ul>
+					<div class="header__mobile-cta">
+						<a href="tel:+78121111111">+7 (812) 111-11-11</a>
+						<ul class="social">
+							<li>
+								<a href="#">
+									<span class="element" style="--icon: url(../images/icon/telegram.svg)"></span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<span class="element" style="--icon: url(../images/icon/whatsapp.svg)"></span>
+								</a>
+							</li>
+							<li>
+								<a href="#" class="icon-wrapper">
+									<svg width="18" height="17" viewBox="0 0 18 17" fill="none"
+										xmlns="http://www.w3.org/2000/svg">
+										<path fill-rule="evenodd" clip-rule="evenodd"
+											d="M8.69805 16.9081C7.02676 16.9081 6.25007 16.6642 4.90002 15.6882C4.04608 16.7861 1.34192 17.6442 1.22399 16.1762C1.22399 15.0742 0.980004 14.143 0.703488 13.1264C0.37411 11.8739 0 10.4791 0 8.45813C0 3.6313 3.96068 0 8.65332 0C13.35 0 17.0301 3.81023 17.0301 8.50286C17.0459 13.1229 13.3181 16.8835 8.69805 16.9081ZM8.76718 4.17214C6.48186 4.05421 4.70077 5.63605 4.30633 8.11656C3.98101 10.1701 4.55845 12.6709 5.05048 12.8011C5.28633 12.858 5.88003 12.3782 6.25007 12.0081C6.86196 12.4308 7.57449 12.6847 8.31581 12.7441C10.6838 12.858 12.7071 11.0553 12.8661 8.68992C12.9587 6.31954 11.1355 4.31185 8.76718 4.1762L8.76718 4.17214Z"
+											fill="#413C3A" />
+									</svg>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+			<div class="header__cta">
+				<div class="header__inner">
+					<a href="tel:+78121111111" class="header__callback">+7 (812) 111-11-11</a>
+					<ul class="social">
+						<li>
+							<a href="#">
+								<span class="element" style="--icon: url(../images/icon/telegram.svg)"></span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="element" style="--icon: url(../images/icon/whatsapp.svg)"></span>
+							</a>
+						</li>
+						<li>
+							<a href="#" class="icon-wrapper">
+								<svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd" clip-rule="evenodd"
+										d="M8.69805 16.9081C7.02676 16.9081 6.25007 16.6642 4.90002 15.6882C4.04608 16.7861 1.34192 17.6442 1.22399 16.1762C1.22399 15.0742 0.980004 14.143 0.703488 13.1264C0.37411 11.8739 0 10.4791 0 8.45813C0 3.6313 3.96068 0 8.65332 0C13.35 0 17.0301 3.81023 17.0301 8.50286C17.0459 13.1229 13.3181 16.8835 8.69805 16.9081ZM8.76718 4.17214C6.48186 4.05421 4.70077 5.63605 4.30633 8.11656C3.98101 10.1701 4.55845 12.6709 5.05048 12.8011C5.28633 12.858 5.88003 12.3782 6.25007 12.0081C6.86196 12.4308 7.57449 12.6847 8.31581 12.7441C10.6838 12.858 12.7071 11.0553 12.8661 8.68992C12.9587 6.31954 11.1355 4.31185 8.76718 4.1762L8.76718 4.17214Z"
+										fill="#413C3A" />
+								</svg>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
