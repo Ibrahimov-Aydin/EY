@@ -264,114 +264,223 @@ function initSliders() {
 
 document.addEventListener('DOMContentLoaded', () => {
   // ======================
-  // 1) PHONE MASK (RU)
+  // OPEN MODAL
   // ======================
-  const phoneInput = document.querySelector('#callbackForm [name="phone"]');
-  if (phoneInput && window.Inputmask) {
-    Inputmask({
-      mask: '+7 (999) 999-99-99',
-      showMaskOnHover: false,
-      showMaskOnFocus: true,
-      clearIncomplete: true,
-    }).mask(phoneInput);
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-open-form]');
+    if (!trigger) return;
+
+    e.preventDefault();
+    if (window.MicroModal) MicroModal.show('form-modal');
+  });
+
+  // ======================
+  // TOAST LOGIC
+  // ======================
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
+  const toastClose = document.getElementById('toastClose');
+  let toastTimer = null;
+
+  const hideToast = () => {
+    if (!toast) return;
+
+    toast.classList.remove('is-show');
+    toast.classList.add('is-hide');
+
+    setTimeout(() => {
+      toast.hidden = true;
+      toast.classList.remove('is-hide');
+    }, 180);
+  };
+
+  const showToast = (text, timeout = 3000) => {
+    if (!toast || !toastText) return;
+
+    toastText.textContent = text;
+
+    toast.hidden = false;
+    toast.classList.remove('is-hide');
+    toast.classList.add('is-show');
+
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(hideToast, timeout);
+  };
+
+  if (toastClose) toastClose.addEventListener('click', hideToast);
+
+  // ======================
+  // CONFIG (TELEGRAM)
+  // ⚠️ вставь сюда свои значения локально
+  // ======================
+  const BOT_TOKEN = '8454367089:AAH961WMxuACIwI5pFBL1jYWBZKrMF0wbIU';
+  const CHAT_ID = '-1003711872435'; 
+
+  // ======================
+  // EMAIL VALIDATION
+  // ======================
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(email);
+
+  // ======================
+  // SEND TO TELEGRAM
+  // ======================
+  async function sendToTelegram({ name, phone, email, message }) {
+    const text =
+      `📝 Новая заявка с сайта\n` +
+      `👤 Имя: ${name}\n` +
+      `📞 Телефон: ${phone}\n` +
+      `📧 Email: ${email}\n` +
+      `💬 Сообщение: ${message || '—'}`;
+
+    const res = await fetch(
+      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text,
+          disable_web_page_preview: true,
+        }),
+      },
+    );
+
+    const data = await res.json().catch(() => null);
+
+    if (!res.ok || !data?.ok) {
+      throw new Error(data?.description || 'Telegram API error');
+    }
   }
 
   // ======================
-  // 2) FORM SEND (Telegram via PHP)
+  // INIT ALL FORMS
+  // (и модалка, и форма на странице)
   // ======================
-  const form = document.getElementById('callbackForm');
-  if (!form) return;
+  const forms = document.querySelectorAll('.callback-block__form');
+  if (!forms.length) return;
 
-  const submitBtn = form.querySelector('button[type="submit"]');
+  forms.forEach((form) => {
+    const submitBtn = form.querySelector('button[type="submit"]');
 
-  const clearErrors = () => {
-    form.querySelectorAll('.callback-block__error').forEach((el) => {
-      el.textContent = '';
-      el.style.display = 'none';
-    });
-  };
-
-  const setError = (inputName, text) => {
-    const input = form.querySelector(`[name="${inputName}"]`);
-    if (!input) return;
-    const line = input.closest('.callback-block__line');
-    const err = line?.querySelector('.callback-block__error');
-    if (err) {
-      err.textContent = text;
-      err.style.display = 'block';
-    }
-  };
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    clearErrors();
-
-    const name = form.querySelector('[name="name"]')?.value.trim() || '';
-    const phone = form.querySelector('[name="phone"]')?.value.trim() || '';
-    const email = form.querySelector('[name="email"]')?.value.trim() || '';
-    const consent = form.querySelector('[name="consent"]')?.checked || false;
-
-    let hasError = false;
-
-    if (!name) {
-      setError('name', 'Введите имя');
-      hasError = true;
+    // ---- phone mask per form
+    const phoneInput = form.querySelector('[name="phone"]');
+    if (phoneInput && window.Inputmask) {
+      Inputmask({
+        mask: '+7 (999) 999-99-99',
+        showMaskOnHover: false,
+        showMaskOnFocus: true,
+        clearIncomplete: true,
+      }).mask(phoneInput);
     }
 
-    // Проверка телефона: должно быть 11 цифр (7 + 10)
-    const phoneDigits = phone.replace(/\D/g, '');
-    if (phoneDigits.length !== 11) {
-      setError('phone', 'Введите корректный номер телефона');
-      hasError = true;
-    }
-
-    if (!email) {
-      setError('email', 'Введите email');
-      hasError = true;
-    }
-
-    if (!consent) {
-      alert('Нужно согласие на обработку данных');
-      hasError = true;
-    }
-
-    if (hasError) return;
-
-    // ✅ Надёжно определяем action (если пусто или "#")
-    const actionAttr = form.getAttribute('action');
-    const actionUrl =
-      !actionAttr || actionAttr === '#' ? 'send.php' : actionAttr;
-
-    const formData = new FormData(form);
-
-    try {
-      if (submitBtn) submitBtn.disabled = true;
-
-      const res = await fetch(actionUrl, {
-        method: 'POST',
-        body: formData,
+    // ---- errors helpers
+    const clearErrors = () => {
+      form.querySelectorAll('.callback-block__error').forEach((el) => {
+        el.textContent = '';
+        el.style.display = 'none';
       });
 
-      const data = await res.json().catch(() => null);
+      form.querySelectorAll('.is-error').forEach((el) => {
+        el.classList.remove('is-error');
+      });
+    };
 
-      if (!res.ok || !data || !data.ok) {
-        const msg = data?.message || 'Ошибка отправки';
-        alert(msg);
-        return;
+    const setError = (inputName, text) => {
+      const field = form.querySelector(`[name="${inputName}"]`);
+      if (!field) return;
+
+      field.classList.add('is-error');
+
+      const line = field.closest('.callback-block__line');
+      const err = line?.querySelector('.callback-block__error');
+      if (err) {
+        err.textContent = text;
+        err.style.display = 'block';
       }
+    };
 
-      alert(data.message || 'Отправлено ✅');
-      form.reset();
+    // remove error on input
+    form.querySelectorAll('input, textarea').forEach((field) => {
+      field.addEventListener('input', () => {
+        field.classList.remove('is-error');
+        const line = field.closest('.callback-block__line');
+        const err = line?.querySelector('.callback-block__error');
+        if (err) {
+          err.textContent = '';
+          err.style.display = 'none';
+        }
+      });
+    });
 
-      // закрыть модалку MicroModal (если подключён)
-      if (window.MicroModal) {
-        MicroModal.close('form-modal');
-      }
-    } catch (err) {
-      alert('Сеть/сервер недоступен');
-    } finally {
-      if (submitBtn) submitBtn.disabled = false;
+    // optional: validate email on blur
+    const emailInput = form.querySelector('[name="email"]');
+    if (emailInput) {
+      emailInput.addEventListener('blur', () => {
+        const value = emailInput.value.trim();
+        if (value && !isValidEmail(value)) {
+          setError('email', 'Введите корректный email');
+        }
+      });
     }
+
+    // ---- submit
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearErrors();
+
+      const name = form.querySelector('[name="name"]')?.value.trim() || '';
+      const phone = form.querySelector('[name="phone"]')?.value.trim() || '';
+      const email = form.querySelector('[name="email"]')?.value.trim() || '';
+      const message =
+        form.querySelector('[name="message"]')?.value.trim() || '';
+      const consent = form.querySelector('[name="consent"]')?.checked || false;
+
+      let hasError = false;
+
+      if (!name) {
+        setError('name', 'Введите имя');
+        hasError = true;
+      }
+
+      if (phone.replace(/\D/g, '').length !== 11) {
+        setError('phone', 'Введите корректный номер телефона');
+        hasError = true;
+      }
+
+      if (!email) {
+        setError('email', 'Введите email');
+        hasError = true;
+      } else if (!isValidEmail(email)) {
+        setError('email', 'Введите корректный email');
+        hasError = true;
+      }
+
+      if (!consent) {
+        showToast('Нужно согласие на обработку данных', 3500);
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      try {
+        if (submitBtn) submitBtn.disabled = true;
+
+        await sendToTelegram({ name, phone, email, message });
+
+        form.reset();
+
+        // ✅ close modal only if this form is inside the modal
+        if (window.MicroModal && form.closest('.modal')) {
+          MicroModal.close('form-modal');
+        }
+
+        showToast('Заявка отправлена ✅', 3500);
+      } catch (err) {
+        showToast('Ошибка отправки. Попробуйте позже.', 4000);
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    });
   });
 });
 

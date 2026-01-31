@@ -353,35 +353,39 @@
 									</ul>
 								</div>
 							</div>
-							<form action="#" class="callback-block__form">
+							<form class="callback-block__form" novalidate>
 								<h2 class="callback-block__subtitle">Оставить заявку</h2>
+
 								<div class="callback-block__wrapper">
 									<div class="callback-block__line">
-										<input type="text" placeholder="Имя *" class="callback-block__input">
-										<p class="callback-block__error">error</p>
+										<input type="text" name="name" placeholder="Имя *" class="callback-block__input"
+											autocomplete="name">
+										<p class="callback-block__error"></p>
 									</div>
+
 									<div class="callback-block__line">
-										<input type="text" class="callback-block__input" placeholder="Телефон *">
-										<p class="callback-block__error">error</p>
+										<input type="tel" name="phone" class="callback-block__input"
+											placeholder="+7 (___) ___-__-__" autocomplete="tel">
+										<p class="callback-block__error"></p>
 									</div>
+
 									<div class="callback-block__line">
-										<input type="text" class="callback-block__input" placeholder="E-mail *">
-										<p class="callback-block__error">error</p>
+										<input type="email" name="email" class="callback-block__input" placeholder="E-mail *"
+											autocomplete="email">
+										<p class="callback-block__error"></p>
 									</div>
 								</div>
-								<textarea name="" id="" class="callback-block__textarea" placeholder="">Сообщение</textarea>
+
+								<textarea name="message" class="callback-block__textarea" placeholder="Сообщение"></textarea>
+
 								<div class="callback-block__cta">
 									<button type="submit">
 										<span>Отправить</span>
-										<svg width="20" height="8" viewBox="0 0 20 8" fill="none"
-											xmlns="http://www.w3.org/2000/svg">
-											<path
-												d="M19.8571 3.93346C20.0476 3.74294 20.0476 3.43409 19.8571 3.24358L16.7528 0.139213C16.5622 -0.051287 16.2534 -0.051287 16.0629 0.139213C15.8724 0.329712 15.8724 0.638573 16.0629 0.829073L18.8223 3.5885L16.0629 6.34794C15.8724 6.53846 15.8724 6.84731 16.0629 7.03782C16.2534 7.22831 16.5622 7.22831 16.7528 7.03782L19.8571 3.93346ZM0 4.07631H19.5122V3.1007H0V4.07631Z"
-												fill="#398EE0" />
-										</svg>
+										<!-- svg -->
 									</button>
+
 									<label class="consent">
-										<input class="consent__input" type="checkbox" name="consent" required />
+										<input class="consent__input" type="checkbox" name="consent" checked />
 										<span class="consent__box" aria-hidden="true"></span>
 
 										<span class="consent__text">
@@ -393,6 +397,7 @@
 									</label>
 								</div>
 							</form>
+
 						</div>
 					</div>
 				</div>
@@ -445,6 +450,14 @@
 		</footer> <!-- Включение подвала -->
 	</div>
 
+	<div class="toast" id="toast" aria-live="polite" aria-atomic="true" hidden>
+		<div class="toast__content">
+			<p class="toast__text" id="toastText"></p>
+		</div>
+	</div>
+
+
+	<script src="https://unpkg.com/inputmask@5.0.8/dist/inputmask.min.js"></script>
 
 	<script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
