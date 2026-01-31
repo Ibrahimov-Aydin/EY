@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ======================
   // 1) PHONE MASK (RU)
   // ======================
-  const phoneInput = document.querySelector('[name="phone"]');
+  const phoneInput = document.querySelector('#callbackForm [name="phone"]');
   if (phoneInput && window.Inputmask) {
     Inputmask({
       mask: '+7 (999) 999-99-99',
@@ -295,7 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const input = form.querySelector(`[name="${inputName}"]`);
     if (!input) return;
     const line = input.closest('.callback-block__line');
-    const err = line ? line.querySelector('.callback-block__error') : null;
+    const err = line?.querySelector('.callback-block__error');
     if (err) {
       err.textContent = text;
       err.style.display = 'block';
@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
       hasError = true;
     }
 
-    // Проверка телефона под маску: должно быть 11 цифр (7 + 10)
+    // Проверка телефона: должно быть 11 цифр (7 + 10)
     const phoneDigits = phone.replace(/\D/g, '');
     if (phoneDigits.length !== 11) {
       setError('phone', 'Введите корректный номер телефона');
@@ -337,12 +337,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (hasError) return;
 
+    // ✅ Надёжно определяем action (если пусто или "#")
+    const actionAttr = form.getAttribute('action');
+    const actionUrl =
+      !actionAttr || actionAttr === '#' ? 'send.php' : actionAttr;
+
     const formData = new FormData(form);
 
     try {
       if (submitBtn) submitBtn.disabled = true;
 
-      const res = await fetch(form.getAttribute('action') || 'send.php', {
+      const res = await fetch(actionUrl, {
         method: 'POST',
         body: formData,
       });
@@ -350,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json().catch(() => null);
 
       if (!res.ok || !data || !data.ok) {
-        const msg = data && data.message ? data.message : 'Ошибка отправки';
+        const msg = data?.message || 'Ошибка отправки';
         alert(msg);
         return;
       }
@@ -369,3 +374,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+

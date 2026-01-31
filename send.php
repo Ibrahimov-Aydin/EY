@@ -13,13 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // ✅ Настройки Telegram
 $BOT_TOKEN = '8454367089:AAH961WMxuACIwI5pFBL1jYWBZKrMF0wbIU';
-$CHAT_ID   = '-1003711872435'; // например 123456789 или -100123...
+$CHAT_ID   = '-1003711872435';
 
 $name    = trim($_POST['name'] ?? '');
 $phone   = trim($_POST['phone'] ?? '');
 $email   = trim($_POST['email'] ?? '');
 $message = trim($_POST['message'] ?? '');
-$consent = isset($_POST['consent']) ? true : false;
+$consent = isset($_POST['consent']);
 
 // ✅ Валидация
 if ($name === '' || $phone === '' || $email === '') {
@@ -32,7 +32,11 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
   respond(false, 'Некорректный email', 422);
 }
 
-// (опционально) простая чистка
+// // ✅ Настройки Telegram
+$BOT_TOKEN = '8454367089:AAH961WMxuACIwI5pFBL1jYWBZKrMF0wbIU';
+$CHAT_ID   = '-1003711872435'; 
+
+// простая чистка
 $name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
 $phone = htmlspecialchars($phone, ENT_QUOTES, 'UTF-8');
 $email = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
@@ -43,15 +47,13 @@ $text =
 ."👤 Имя: {$name}\n"
 ."📞 Телефон: {$phone}\n"
 ."📧 Email: {$email}\n"
-."💬 Сообщение: ".($message !== '' ? $message : '—');
+."💬 Сообщение: " . ($message !== '' ? $message : '—');
 
 $url = "https://api.telegram.org/bot{$BOT_TOKEN}/sendMessage";
 
-// ✅ Отправка
 $payload = [
   'chat_id' => $CHAT_ID,
   'text' => $text,
-  'parse_mode' => 'HTML',
   'disable_web_page_preview' => true
 ];
 
@@ -70,8 +72,12 @@ curl_close($ch);
 if ($errno) {
   respond(false, 'Ошибка отправки (cURL)', 500);
 }
+
 if ($http < 200 || $http >= 300) {
-  respond(false, 'Ошибка Telegram API', 500);
+  respond(false, 'Ошибка Telegram API: ' . $result, 500);
 }
 
 respond(true, 'Заявка отправлена ✅');
+
+
+
