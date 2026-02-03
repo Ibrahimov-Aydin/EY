@@ -1037,13 +1037,13 @@ h6 {
   background: #413c3a;
   transition: background 0.5s ease 0s;
 }
-@media (any-hover: hover) {
-  .element:hover {
-    background: #398ee0;
-  }
-}
 .wrapper_header-light .element {
   background-color: #fff;
+}
+@media (any-hover: hover) {
+  .element:hover {
+    background: #398ee0 !important;
+  }
 }
 .footer .element {
   background-color: #fff;
@@ -1633,7 +1633,7 @@ h6 {
 }
 .callback-block__contact {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 15px;
   padding-bottom: 22px;
   border-bottom: 1px solid rgba(36, 36, 36, 0.2);
@@ -2079,13 +2079,13 @@ h6 {
 //========================================================================================================================================================
 
 .toast[hidden] {
-  display: none;
+  /* display: none; */
 }
 
 .toast {
   position: fixed;
-  left: 20px;
-  bottom: 20px;
+  right: 20px;
+  top: 20px;
   z-index: 9999;
   max-width: 360px;
   color: #fff;
@@ -2093,7 +2093,7 @@ h6 {
 .toast__content {
   background: rgba(20, 20, 20, 0.92);
   color: #fff;
-  padding: 14px 14px;
+  padding: 20px;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   display: flex;
@@ -2103,7 +2103,7 @@ h6 {
 
 .toast__text {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.3;
 }
 

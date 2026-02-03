@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ⚠️ вставь сюда свои значения локально
   // ======================
   const BOT_TOKEN = '8454367089:AAH961WMxuACIwI5pFBL1jYWBZKrMF0wbIU';
-  const CHAT_ID = '-1003711872435'; 
+  const CHAT_ID = '-1003711872435';
 
   // ======================
   // EMAIL VALIDATION
@@ -437,20 +437,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let hasError = false;
 
-      if (!name) {
-        setError('name', 'Введите имя');
-        hasError = true;
-      }
+      // if (!name) {
+      //   setError('name', 'Введите имя');
+      //   hasError = true;
+      // }
 
       if (phone.replace(/\D/g, '').length !== 11) {
         setError('phone', 'Введите корректный номер телефона');
         hasError = true;
       }
 
-      if (!email) {
-        setError('email', 'Введите email');
-        hasError = true;
-      } else if (!isValidEmail(email)) {
+      if (email && !isValidEmail(email)) {
         setError('email', 'Введите корректный email');
         hasError = true;
       }
@@ -483,4 +480,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
-
