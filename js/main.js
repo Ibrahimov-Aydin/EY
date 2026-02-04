@@ -471,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
           MicroModal.close('form-modal');
         }
 
-        showToast('Заявка отправлена ✅', 3500);
+        showToast('Заявка отправлена', 3500);
       } catch (err) {
         showToast('Ошибка отправки. Попробуйте позже.', 4000);
       } finally {
